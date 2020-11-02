@@ -10,10 +10,12 @@ public class SelectAndDisplay : MonoBehaviour
     Color _default;
 
     Text _selectedPart;
+    [SerializeField]
+    private string partName; // if left blank then it will use the transform name.
 
     void Awake()
     {
-        
+
         _default = GetComponent<MeshRenderer>().material.color;
 
 
@@ -29,7 +31,7 @@ public class SelectAndDisplay : MonoBehaviour
     }
     void OnEnable()
     {
-        EventManager.Listen("ButtonCreation",CreateButtonForParts);
+        EventManager.Listen("ButtonCreation", CreateButtonForParts);
     }
     void OnDisable()
     {
@@ -53,8 +55,16 @@ public class SelectAndDisplay : MonoBehaviour
 
     void CreateButtonForParts()
     {
-       var Q = new GameObject("CarPart:" + transform.name);
-        Q.AddComponent<Text>().text = "Part:" + transform.name;
+        var Q = new GameObject("CarPart:" + transform.name);
+        if (!string.IsNullOrEmpty(partName))
+        {
+            Q.AddComponent<Text>().text = "Part:" + partName;
+        }
+        else
+        {
+            Q.AddComponent<Text>().text = "Part:" + transform.name;
+        }
+
         var text = Q.GetComponent<Text>();
         text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
         text.resizeTextForBestFit = true;
