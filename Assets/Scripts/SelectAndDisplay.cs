@@ -15,11 +15,12 @@ public class SelectAndDisplay : MonoBehaviour
 
     void Awake()
     {
-
-        _default = GetComponent<MeshRenderer>().material.color;
-
-
         _renderer = GetComponent<MeshRenderer>();
+
+        if (_renderer.material.HasProperty("_Color"))
+        {
+            _default = _renderer.material.color;
+        }
         try
         {
             _selectedPart = GameObject.Find("SelectedPartText").GetComponent<Text>();
@@ -55,6 +56,9 @@ public class SelectAndDisplay : MonoBehaviour
 
     void CreateButtonForParts()
     {
+        var buttonGroup = GameObject.Find("ButtonGroup").transform;
+
+
         var Q = new GameObject("CarPart:" + transform.name);
         if (!string.IsNullOrEmpty(partName))
         {
@@ -64,13 +68,11 @@ public class SelectAndDisplay : MonoBehaviour
         {
             Q.AddComponent<Text>().text = "Part:" + transform.name;
         }
-
         var text = Q.GetComponent<Text>();
         text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
         text.resizeTextForBestFit = true;
         Q.AddComponent<Button>().onClick.AddListener(OnMouseDown);
-        Q.transform.SetParent(GameObject.Find("ButtonGroup").transform);
+        Q.transform.parent = buttonGroup;
     }
-
 
 }
