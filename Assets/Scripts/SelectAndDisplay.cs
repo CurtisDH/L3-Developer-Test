@@ -28,6 +28,11 @@ public class SelectAndDisplay : MonoBehaviour
         catch
         {
             _selectedPart = new GameObject("SelectedPartText").AddComponent<Text>();
+            _selectedPart.resizeTextForBestFit = true;
+            _selectedPart.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+            _selectedPart.transform.parent = GameObject.Find("Canvas").transform;
+            _selectedPart.rectTransform.position = new Vector3(Screen.width/2,Screen.height/1.25f,0);
+            _selectedPart.horizontalOverflow = HorizontalWrapMode.Overflow;
         }
     }
     void OnEnable()
@@ -43,6 +48,11 @@ public class SelectAndDisplay : MonoBehaviour
         Debug.Log(transform.name);
         Camera.main.transform.LookAt(transform);
         Camera.main.fieldOfView = 30;
+        if(!string.IsNullOrEmpty(partName))
+        {
+            _selectedPart.text = partName;
+        }
+        else
         _selectedPart.text = transform.name;
     }
     void OnMouseEnter()
